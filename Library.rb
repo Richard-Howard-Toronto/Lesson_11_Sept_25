@@ -13,19 +13,23 @@ class Book
       @name = name
       @isbn = isbn
       @on_shelf = true
-      @returned_to_library = true
       @lent_out = false
+      @due_date = 0
+
     end
 
     #This instance method should return the value of @@on_loan.
+
     def borrow
       due_by_date = 0
       if @lent_out == true
-        return false
+        puts "sorry, already lent out"
       else
-        due_by_date = Book.current_due_date
+        current_date_time = DateTime.now
+        @due_date = current_date_time.next_month  #new instance var is due_date
         @on_shelf= false
-        @on_loan= true
+        @on_loan = true
+        @lent_out = true
       return true #to say you have successfully borrowed the book
     end
     end
@@ -38,19 +42,15 @@ class Book
 
     #lent_out? This instance method return true if a book has already been borrowed and false otherwise.
 
+    #use p self to find out what self is referring to
+
     def lent_out?
-      if borrow == true
-        @lent_out = true
+      if Book.available.include?(self)
+        return @lent_out = false
       else
-        @lent_out = false
+        return @lent_out = true
       end
     end
-
-
-    def browse
-      #This class method should return a random book from @@on_shelf (you may need to consult the Array docs to figure out how to do this).
-    end
-
 
 #CLASS METHODS
 
@@ -61,26 +61,34 @@ class Book
     end
 
 
-#set the due date for books taken out today
+    #Class method - set the due date for books taken out today
+
     def self.current_due_date
-      current_date_time = DateTime.now
-      due_date = current_date_time.next_month
+      if @lent_out == true
+        current_date_time = DateTime.now
+        due_date = current_date_time.next_month
+      else
+        puts "not taken out today"
+      end
     end
 
     #overdue- This class method should return a list of books whose due dates are in the past (ie. less than Time.now).
 
     def self.overdue
+      current_date_time = DateTime.now
+      due_date = current_date_time.next_month
       if due_date <= current_date_time
         puts "book is overdue"
       else
-        puts ""
+        puts "not overdue"
       end
     end
 
-    #This class method should return a random book from @@on_shelf (you may need to consult the Array docs to figure out how to do this).
 
     def self.browse
-      return @@on_shelf.sample
+      #This class method should return a random book from @@on_shelf (you may need to consult the Array docs to figure out how to do this).
+      on_shelf_array = Book.available.to_a
+      on_shelf_array_sample = on_shelf_array.sample
     end
 
 
@@ -105,15 +113,21 @@ book4 = Book.create("Running","Mike Rambler",62)
 book5 = Book.create("Diving","M.A.",98)
 book6 = Book.create("Flying","M.A.",918)
 
-# and a book that is not on the shelf or on loan (in someone's car?)
+# and book7 that is not on the shelf or on loan (in someone's car?)
+book7 = Book.new("The book that wasn't on shelf or on-loan","Anon.",1)
 
-book7 = Book.new("The book that wasn't","Anon.",1)
+
+
 
 puts "------- book 1, borrow instance method --------"
 
 puts book1.inspect
 
 book1.borrow
+
+puts book1.inspect
+
+book1.borrow #to try and borrow a second times
 
 puts book1.inspect
 
@@ -126,31 +140,30 @@ book2.lent_out?
 
 puts book2.inspect
 
+puts "------- book 3, borrow instance method --------"
+
+book3.borrow
+
+puts book3.inspect
 
 
 
-
-#CALL ON A CLASS METHOD
-
-puts "------ currently on the shelf"
+puts "---- class Instance.  All Books on available ------- "
 
 p Book.available
 
+puts "---- class Instance browse.  Choose a random book ------- "
 
-#
-# puts "------- book 2, available --------"
-#
-# #book2.available
-#
-# puts book2.inspect
-#
-#
-# puts "------- book 3, lent out --------"
-#
-# book3.lent_out
-#
-# puts book3.inspect
-#
-# book3.borrowed
-#
-# puts book3.inspect
+p Book.browse  #IT WORKS!
+
+
+
+puts "----- class Current Due Date for books borrowed today  ----- "
+
+p Book.current_due_date
+
+
+
+puts "----- class All Books Overdue ----- "
+
+p Book.overdue
