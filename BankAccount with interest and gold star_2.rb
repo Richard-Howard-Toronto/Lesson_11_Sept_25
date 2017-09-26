@@ -48,7 +48,7 @@ class BankAccount
     running_total = 0
     @@accounts.each do | one |
       running_total += one.balance  #not the entire object
-    end
+  end
 
     return running_total
 
@@ -71,10 +71,10 @@ class BankAccount
       @@accounts.each do | one |
         new_balance_amt_gold_star = one.balance + @@gold_star
         one.new_balance(new_balance_amt_gold_star)
-      end
     end
+  end
 
-    end
+  end
 
 end
 
