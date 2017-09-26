@@ -30,6 +30,8 @@ class Book
         @on_shelf= false
         @on_loan = true
         @lent_out = true
+        @@on_shelf -= [self]
+        @@on_loan += [self]
       return true #to say you have successfully borrowed the book
     end
     end
@@ -64,29 +66,43 @@ class Book
     #Class method - set the due date for books taken out today
 
     def self.current_due_date
-      if @lent_out == true
-        current_date_time = DateTime.now
-        due_date = current_date_time.next_month
-      else
-        puts "not taken out today"
+      current_date_time  = DateTime.now
+      due_date = current_date_time.next_month
+      @@on_loan.each  do | book |
+        if book.lent_out? == true
+          puts "due date is #{due_date}"
+        else
+          puts "not taken out today"
+        end
       end
     end
 
     #overdue- This class method should return a list of books whose due dates are in the past (ie. less than Time.now).
 
+    def due_date  #INSTANCE METHOD
+      @due_date
+    end
+
+    def title  #INSTANCE METHOD
+      @title
+    end
+
+
     def self.overdue
-      current_date_time = DateTime.now
+      current_date_time  = DateTime.now
       due_date = current_date_time.next_month
-      if due_date <= current_date_time
-        puts "book is overdue"
-      else
-        puts "not overdue"
+      @@on_loan.each  do | book |
+        if book.due_date < current_date_time
+          puts "your book is overdue"
+        else
+          puts "your book #{book.title} is not overdue"
+        end
       end
     end
 
 
     def self.browse
-      #This class method should return a random book from @@on_shelf (you may need to consult the Array docs to figure out how to do this).
+      #This class method should return a random book from @@on_shelf
       on_shelf_array = Book.available.to_a
       on_shelf_array_sample = on_shelf_array.sample
     end
