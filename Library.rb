@@ -38,9 +38,6 @@ class Book
 
     #This instance method is how a book gets returned to the library. It should call lent_out? to verify that the book was actually on loan. If it wasn't on loan in the first place, return false. Otherwise, move the book from the collection of books on loan to the collection of books on the library shelves, and set the book's due date to nil before returning true..
 
-    def returned_to_library
-
-    end
 
     #lent_out? This instance method return true if a book has already been borrowed and false otherwise.
 
@@ -53,6 +50,20 @@ class Book
         return @lent_out = true
       end
     end
+
+#Otherwise, move the book from the collection of books on loan to the collection of books on the library shelves, and set the book's due date to nil before returning true
+
+
+    def return_to_library
+      if Book.available.include?(self) == false
+        @@on_shelf += [self]
+        @@on_loan -= [self]
+        @due_date = nil
+        return
+
+      end
+    end
+
 
 #CLASS METHODS
 
@@ -118,6 +129,11 @@ class Book
       return @@on_loan = true
     end
 
+    #It should call lent_out? to verify that the book was actually on loan. If it wasn't on loan in the first place, return false. Otherwise, move the book from the collection of books on loan to the collection of books on the library shelves, and set the book's due date to nil before returning true.
+
+
+
+
 end
 
 #declaring objects, book1.2..3 of class Book
@@ -164,11 +180,21 @@ puts book3.inspect
 
 
 
-puts "---- class Instance.  All Books on available ------- "
+puts "---- Instance return_to_library -- "
+
+book3.return_to_library
+
+puts book3.inspect
+
+puts Book.available.include?(book3)
+
+
+puts "----  Class Instance - Available.  All Books on available -"
 
 p Book.available
 
-puts "---- class Instance browse.  Choose a random book ------- "
+
+puts "----  Class Instance - browse. Choose a random book -- "
 
 p Book.browse  #IT WORKS!
 
