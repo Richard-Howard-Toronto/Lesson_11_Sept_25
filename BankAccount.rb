@@ -23,9 +23,9 @@ class BankAccount
 #Class Method
 
   def self.create  #adding to the list of all bank accounts
-    newaccount = BankAccount.new
-    @@accounts << newaccount
-    return newaccount
+    bankaccount = BankAccount.new
+    @@accounts << bankaccount
+    return bankaccount
     # this is a class method
   end
 
