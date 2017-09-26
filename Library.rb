@@ -38,8 +38,8 @@ class Book
 
     #lent_out? This instance method return true if a book has already been borrowed and false otherwise.
 
-    def lent_out
-      if borrowed == true
+    def lent_out?
+      if borrow == true
         @lent_out = true
       else
         @lent_out = false
@@ -49,11 +49,6 @@ class Book
 
     def browse
       #This class method should return a random book from @@on_shelf (you may need to consult the Array docs to figure out how to do this).
-    end
-
-    #This instance method return true if a book has already been borrowed and false otherwise.
-    def lent_out?
-      return @@on_loan = true
     end
 
 
@@ -94,6 +89,11 @@ class Book
       return @@on_shelf
     end
 
+    #This class method should return the value of @@on_loan
+    def self.borrowed
+      return @@on_loan = true
+    end
+
 end
 
 #declaring objects, book1.2..3 of class Book
@@ -103,17 +103,11 @@ book2 = Book.create("Hiking","Mike Rambler",62)
 book3 = Book.create("Walking","M.A.",198)
 book4 = Book.create("Running","Mike Rambler",62)
 book5 = Book.create("Diving","M.A.",98)
-
 book6 = Book.create("Flying","M.A.",918)
 
-#newbook = Book.create("Diving","M.A.",18)
-#create("title","name","isbn")
+# and a book that is not on the shelf or on loan (in someone's car?)
 
-puts book1.inspect
-puts book2.inspect
-puts book3.inspect
-puts book4.inspect
-puts book5.inspect
+book7 = Book.new("The book that wasn't","Anon.",1)
 
 puts "------- book 1, borrow instance method --------"
 
@@ -122,6 +116,19 @@ puts book1.inspect
 book1.borrow
 
 puts book1.inspect
+
+
+puts "------- book 2, lent_out? instance method --------"
+
+puts book2.inspect
+
+book2.lent_out?
+
+puts book2.inspect
+
+
+
+
 
 #CALL ON A CLASS METHOD
 
